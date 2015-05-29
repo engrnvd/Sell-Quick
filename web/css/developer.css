@@ -1,0 +1,31 @@
+.valuationForm .btn:focus{
+    color: #fff;
+}
+
+.first-section{
+    background-color: #9CD2F8;
+}
+
+#valuationform-reasonforselling option{
+    color: #000;
+}
+#valuationform-reasonforselling option:first-child{
+    color: #999;
+}
+
+.loader-img{
+    position: absolute;
+    top: 15px;
+    right: 18px;
+}
+
+.has-error input,.has-error select,.has-error textarea{
+    /*border: 1px solid #f00 !important;*/
+    -webkit-box-shadow: 0px 0px 5px 1px rgba(255,0,0,1) !important;
+    -moz-box-shadow: 0px 0px 5px 1px rgba(255,0,0,1) !important;
+    box-shadow: 0px 0px 5px 1px rgba(255,0,0,1) !important;
+}
+
+form .help-block-error{
+    display: none;
+}
