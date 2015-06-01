@@ -40,6 +40,7 @@ class ValuationForm extends Model
         return [
             [['postcode', 'address', 'fullName', 'telephone','email', 'estimatedPropertyValue', 'reasonForSelling'], 'required'],
             ['email', 'email'],
+            ['estimatedPropertyValue', 'number'],
             ['reasonForSelling', 'in', 'range' => $this->reasonsForSellingOptions, 'message' => 'Please choose a reason for selling', ],
             ['telephone', 'string', 'max' => 11, 'min' => 11, 'message' => 'Phone must contain 11 digits only', ],
             ['telephone', 'custom\validators\UkPhoneValidator', ],

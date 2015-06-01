@@ -33,7 +33,7 @@
                             <h4>Estimation</h4>
                             <p>
                                 Selling price<br />
-                                <span>£21,000-£56,000</span>
+                                <span>£<?=$minPropertyValue?> - £<?=$maxPropertyValue?></span>
                             </p>
                         </div><!--price tag-->
                     </div><!--col lg sm 2 3-->
@@ -89,7 +89,7 @@
                     <h4>Estimation</h4>
                     <p>
                         Selling price<br />
-                        <span>£21,000-£56,000</span>
+                        <span>£<?=$minPropertyValue?> - £<?=$maxPropertyValue?></span>
                     </p>
                 </div><!--price tag-->
             </div><!--col lg sm 2 3-->
