@@ -14,7 +14,7 @@ $params['moreAboutSQRedirectPage'] = "http://www.expressestateagency.co.uk/LPAPT
 if(YII_ENV_TEST)
 {
     $params['enableConversionCodes'] = false;
-    $params['assetsDir'] = '########';
+    $params['assetsDir'] = "http://104.238.102.6/~rawal/LP/SQ/sq-29-05-15/web/";
     $params['baseUrl'] = $params['assetsDir']."index.php/";
 }
 elseif(YII_ENV_DEV)

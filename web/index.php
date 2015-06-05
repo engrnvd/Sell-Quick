@@ -4,6 +4,9 @@ if( $_SERVER['HTTP_HOST'] == 'localhost' ){
     defined('YII_ENV') or define('YII_ENV', 'dev');
     defined('YII_DEBUG') or define('YII_DEBUG', true);
 }
+elseif( $_SERVER['HTTP_HOST'] == '104.238.102.6' ){
+    defined('YII_ENV') or define('YII_ENV', 'test');
+}
 else{
     defined('YII_ENV') or define('YII_ENV', 'prod');
 }
