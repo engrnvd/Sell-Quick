@@ -113,7 +113,7 @@ class SugarRequestHandler {
         return $response;
     }
 
-    public function val($field)
+    private function val($field)
     {
         return isset($this->formData[$field]) ? $this->formData[$field] : "";
     }
