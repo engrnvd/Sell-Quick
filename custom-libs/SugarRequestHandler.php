@@ -6,21 +6,23 @@
  */
 namespace yii\nvd;
 
+/**
+ * Class SugarRequestHandler
+ * @package yii\nvd
+ * @depends:
+ *  - yii\nvd\Mailer: should be available for debugMode email
+ *  - Yii::$app->params['baseUrl']: should be declared for debugMode email
+ */
 class SugarRequestHandler {
     public $centralUrl = "http://6gvt-nynn.accessdomain.com/spcentralengine/request.action.php";
-    public $lead_subject; // email subject
-    public $domain; // e.g. eea
+    public $lead_subject = "Sell Quick - LP 1"; // email subject
+    public $domain = "sq"; // e.g. eea, sq
     public $devicetype = "desktop";
-    public $source; // e.g. lpt
+    public $source = "lpt"; // e.g. lpt
     public $lead_type; // SQ or SQ Priority Lead
     public $leadID = null;
     public $insertSugar = "Yes";
     public $formData = [];
-
-//    public function __construct()
-//    {
-//        $this->centralUrl =
-//    }
 
     /**
      * @param array $formData:
@@ -37,70 +39,82 @@ class SugarRequestHandler {
      * [LeadID] => --optional--
      * [reportUrl] => --optional-- // summary report (about the property) url
      *
-     * @param bool $testMode
+     * @param bool $debugMode:
+     * When set to true,
+     *  - will send a detailed email to $debugModeReportEmail
+     *  - will not send request to the server
+     * @param string $debugModeReportEmail
      * @return mixed
      */
-    public function sendRequest( $formData = [], $testMode = false ) {
+    public function sendRequest( $formData = [], $debugMode = false, $debugModeReportEmail = "naveed.malik@dynamologic.com" ) {
         empty($formData) or $this->formData = $formData;
-        if( isset($formData['address']) )
-            $this->formData = array_merge( $this->formData, static::addressInfo($formData['address']) );
+        isset($formData['address']) and $this->formData = array_merge( $this->formData, static::addressInfo($formData['address']) );
 
-        $UserData['lead_subject'] = $this->lead_subject;
-        $UserData['domain'] = $this->domain;
-        $UserData['devicetype'] = $this->devicetype;
-        $UserData['source'] = $this->source;
-        $UserData['reporturl'] = $this->val("reportUrl");
-        $UserData['lead_type'] = $this->lead_type;
-        $UserData['IP'] = get_user_ip_address();
+        $userData['lead_subject'] = $this->lead_subject;
+        $userData['domain'] = $this->domain;
+        $userData['devicetype'] = $this->devicetype;
+        $userData['source'] = $this->source;
+        $userData['reporturl'] = $this->val("reportUrl");
+        $userData['lead_type'] = $this->lead_type;
+        $userData['IP'] = get_user_ip_address();
 
-        $UserData['name'] = $this->val("fullName");
-        $UserData['address'] = $this->val("primary_address_street");
-        $UserData['postcode'] = $this->val("postcode");
-        $UserData['telephone'] = $this->val("telephone");
-        $UserData['estimatedvalue'] = $this->val("estimatedPropertyValue");
-        $UserData['email'] = $this->val("email");
+        $userData['name'] = $this->val("fullName");
+        $userData['address'] = $this->val("primary_address_street");
+        $userData['postcode'] = $this->val("postcode");
+        $userData['telephone'] = $this->val("telephone");
+        $userData['estimatedvalue'] = $this->val("estimatedPropertyValue");
+        $userData['email'] = $this->val("email");
 
-        $UserData['SugarList'] = [
-            array('name' => 'first_name', 'value' => $UserData['name']),
-            array('name' => 'phone_work', 'value' => $UserData['telephone']),
-            array('name' => 'primary_address_street', 'value' => $UserData['address']),
-            array('name' => 'primary_address_state', 'value' => $this->val("primary_address_state")),
-            array('name' => 'primary_address_city', 'value' => $this->val("primary_address_city")),
-            array('name' => 'primary_address_postalcode', 'value' => $UserData['postcode']),
-            array('name' => 'email1', 'value' => $UserData['email'])
+        $userData['SugarList'] = [
+            [ 'name' => 'first_name', 'value' => $userData['name'] ],
+            [ 'name' => 'phone_work', 'value' => $userData['telephone'] ],
+            [ 'name' => 'primary_address_street', 'value' => $userData['address'] ],
+            [ 'name' => 'primary_address_state', 'value' => $this->val("primary_address_state") ],
+            [ 'name' => 'primary_address_city', 'value' => $this->val("primary_address_city") ],
+            [ 'name' => 'primary_address_postalcode', 'value' => $userData['postcode'] ],
+            [ 'name' => 'email1', 'value' => $userData['email'] ]
         ];
 
         // if it is an update request
-        if ( $this->leadID ) { $UserData['SugarList'][] = array( 'name' => 'id', 'value' => $this->leadID ); }
+        if ( $this->leadID )
+            $userData['SugarList'][] = [  'name' => 'id', 'value' => $this->leadID  ];
 
-        if (isset($formData['requested_appointment_time'])) {
-            $UserData['requested_appointment_time'] = $formData['requested_appointment_time'];
+        if (isset($formData['requested_appointment_time']))
+            $userData['requested_appointment_time'] = $formData['requested_appointment_time'];
+
+        // register send-lead-email action:
+        $actionsArrayData = [ [ 'name' => 'LeadEmail', 'value' => 'LeadEmail'] ];
+
+        if ($this->insertSugar == 'Yes')
+        {
+            // register insert-lead action:
+            if( $this->leadID ) // it is an update request
+                $actionsArrayData[] = [ 'name' => 'UpdateSugarTest', 'value' => 'UpdateSugarTest' ];
+            else // it is an insert request
+                $actionsArrayData[] = [ 'name' => 'SugarTest', 'value' => 'SugarTest' ];
         }
 
-        if ($this->insertSugar == 'No') {
-            // only send lead email
-            $actions_array = json_encode(array(array('name' => 'LeadEmail', 'value' => 'LeadEmail')));
-        } else {
-            // send lead email:
-            $actionsArrayData = array(array('name' => 'LeadEmail', 'value' => 'LeadEmail'));
-            // also decide whether to insert or update the lead:
-            if ( $this->leadID ) {
-                $actionsArrayData[] = array('name' => 'UpdateSugarTest', 'value' => 'UpdateSugarTest');
-            } else {
-                $actionsArrayData[] = array('name' => 'SugarTest', 'value' => 'SugarTest');
-            }
-            $actions_array = json_encode($actionsArrayData);
+        $actions_array = json_encode($actionsArrayData);
+
+        if($debugMode)
+        {
+            $body = "<h2><pre>";
+            $body .= "This data was received:<br>";
+            $body .= var_export($formData,true);
+            $body .= "<br><br>\$this->formData:<br>";
+            $body .= var_export($this->formData,true);
+            $body .= "<br><br>\$UserData:<br>";
+            $body .= var_export($userData,true);
+            $body .= "<br><br>\$actions_array:<br>";
+            $body .= var_export($actions_array,true);
+            $body .= "</pre></h2>";
+            Mailer::send($debugModeReportEmail,"Test Mode Active for SQ-LP",$body,\Yii::$app->params['baseUrl']);
+            return false;
         }
 
-//        pr($formData,"This data was received");
-//        pr($this->formData,"This data is retrieved");
-//        pr($UserData,"This  is UserData");
-//        pr($actions_array,"This  is \$actions_array");
-//        exit;
-
-        $api_request = 'method=requiredactions'
-            . '&actionsarray=' . $actions_array
-            . '&userdata=' . json_encode($UserData);
+        $api_request = "method=requiredactions";
+        $api_request .= "&actionsarray=".$actions_array;
+        $api_request .= "&userdata=".json_encode($userData);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->centralUrl);
         curl_setopt($ch, CURLOPT_VERBOSE, 1);
@@ -108,9 +122,7 @@ class SugarRequestHandler {
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $api_request);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        $response = curl_exec($ch);
-
-        return $response;
+        return curl_exec($ch);
     }
 
     private function val($field)

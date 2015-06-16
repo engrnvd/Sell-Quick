@@ -40,11 +40,19 @@ class ValuationForm extends Model
         return [
             [['postcode', 'address', 'fullName', 'telephone','email', 'estimatedPropertyValue', 'reasonForSelling'], 'required'],
             ['email', 'email'],
-            ['estimatedPropertyValue', 'number'],
+            ['estimatedPropertyValue', 'string', 'max' => 12,],
             ['reasonForSelling', 'in', 'range' => $this->reasonsForSellingOptions, 'message' => 'Please choose a reason for selling', ],
             ['telephone', 'string', 'max' => 11, 'min' => 11, 'message' => 'Phone must contain 11 digits only', ],
             ['telephone', 'custom\validators\UkPhoneValidator', ],
             ['postcode', 'match', 'pattern' => '/[A-Z]{1,2}[0-9]{1,2} ?[0-9][A-Z]{2}/i', 'message' => 'Please enter a valid Postcode'],
+            /*
+             * estimatedPropertyValue allowed formats
+             * 100,000
+             * £100,000
+             * 100000
+             * £100000
+             * */
+            ['estimatedPropertyValue', 'match', 'pattern' => '/^\£?(([1-9][0-9]{0,2}(,[0-9]{3})*)|[0-9]+)?$/'],
         ];
     }
 

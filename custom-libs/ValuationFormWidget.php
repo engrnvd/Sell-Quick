@@ -51,7 +51,7 @@ class ValuationFormWidget {
         if( $this->horizontal ) { echo "</div>"; }
 
         if( $this->horizontal ) { echo "<div class='row'>"; }
-        echo $this->input('estimatedPropertyValue');
+        echo $this->input('estimatedPropertyValue',['maxlength' => 12]);
         echo $this->dropDown('reasonForSelling', $this->model->reasonsForSellingOptions());
         if( $this->horizontal ) { echo "</div>"; }
 

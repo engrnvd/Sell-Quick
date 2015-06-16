@@ -18,19 +18,12 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'js/jqwidgets/styles/jqx.base.css',
-        'js/jqwidgets/styles/jqx.eea.css',
-        'css/tinycarousel.css',
+        'css/font-awesome.css',
         'css/custom.css',
         'css/developer.css',
     ];
     public $js = [
         'js/bootstrap.min.js',
-        'js/jqwidgets/jqxcore.js',
-        'js/jqwidgets/jqxdatetimeinput.js',
-        'js/jqwidgets/jqxcalendar.js',
-        'js/jqwidgets/globalization/globalize.js',
-        'js/tinycarousel.min.js',
         'js/calendar.js',
         'js/postcode.js',
         'js/developer.js',

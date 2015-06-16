@@ -3,7 +3,7 @@
         <div class="section1-left after dark-blue-bg text-center">
             <h2><span><?=$formData['fullName']?>,</span> <br />
                 your personal offer estimation</h2>
-            <p>Based on your valuation of <strong>£ <?=$formData['estimatedPropertyValue']?></strong> <br />
+            <p>Based on your valuation of <strong>£ <?=$estimatedPropertyValue?></strong> <br />
                 on your property in <strong><?=$formData['postcode']?>,</strong> <br />
                 here are the results of our Offer Calculator...</p>
         </div><!--section1 left-->
@@ -11,7 +11,7 @@
     <div class="col-lg-6 col-sm-6 padding0">
 <!--        <div class="section1-right map-right padding0 text-center">-->
             <iframe width="100%" height="553px" frameborder="0" style="border:0"
-            src="https://www.google.com/maps/embed/v1/place?q=BL98PS%2C%20United%20Kingdom&key=AIzaSyCUv8spqL1tzTuewXOXzIG1X7Nod1ua_3Y"></iframe>
+            src="https://www.google.com/maps/embed/v1/place?q=<?=$formData['postcode']?>%2C%20United%20Kingdom&key=AIzaSyCUv8spqL1tzTuewXOXzIG1X7Nod1ua_3Y"></iframe>
 <!--        </div><!--section1 left-->
     </div><!--col lg sm 6-->
     <div class="clear"></div>
@@ -32,8 +32,8 @@
                         <div class="price-tag">
                             <h4>Estimation</h4>
                             <p>
-                                Selling price<br />
-                                <span>£<?=$minPropertyValue?> - £<?=$maxPropertyValue?></span>
+                                Selling price<br/>
+                                <span>£<?=($estimatedPropertyValue * 0.98)?> - £<?=$estimatedPropertyValue?></span>
                             </p>
                         </div><!--price tag-->
                     </div><!--col lg sm 2 3-->
@@ -62,7 +62,7 @@
                         <img src="<?=Yii::$app->params['assetsDir']?>images/arrow-right-point.png" class="img-width" alt="" />
                     </div><!--col lg 2 2-->
                     <div class="col-lg-10 col-sm-10 padding0">
-                        <a href="<?=Yii::$app->params['moreAboutSQPage']?>" class="orange-btn">
+                        <a href="<?=Yii::$app->params['moreAboutSQPage']?>" target="_blank" class="orange-btn">
                             Click here to find out more about Express Estate Agency’s Quick Sale Option
                         </a>
                     </div><!--col lg 8-->
@@ -89,13 +89,13 @@
                     <h4>Estimation</h4>
                     <p>
                         Selling price<br />
-                        <span>£<?=$minPropertyValue?> - £<?=$maxPropertyValue?></span>
+                        <span>£<?=($estimatedPropertyValue * 0.8)?> - £<?=($estimatedPropertyValue * 0.85)?></span>
                     </p>
                 </div><!--price tag-->
             </div><!--col lg sm 2 3-->
             <div class="col-lg-5 col-sm-5 pull-right padding-right0 mobile-padding0">
                 <div class="list-style3">
-                    <h2 class="heading-blue">Not recommended for you <img src="<?=Yii::$app->params['assetsDir']?>images/round-cross.png" alt="" /></h2>
+                    <h2 class="heading-blue">Not recommended for you <img src="<?=Yii::$app->params['assetsDir']?>images/round-cross.png"/></h2>
                     <p style="font-size:18px; font-weight:bold; padding:10px 0 0 0;">Time to sell = 7 days</p>
                     <ul>
                         <li>Based on the estimated value of your property, the location and your reason for selling.  We do not believe that this option is best for you </li>
@@ -109,13 +109,15 @@
     <br /><br /><br /><br />
 </section><!--section 3-->
 
-<script>
-    $(function () {
-        setTimeout(function(){ $("#recommended-option-modal").modal('show'); }, 3000);
-    });
-</script>
 
 <?php include_once __DIR__."/../snippets/modal-recomended-option.php" ?>
 
 <?php if(Yii::$app->params['enableConversionCodes'])
 { require_once __DIR__."/../snippets/conversation-scripts/include_conversion_codes.php"; }
+?>
+
+<script>
+window.onload = function () {
+    setTimeout( function(){ $("#recommended-option-modal").modal('show'); }, 3000 );
+};
+</script>

@@ -7,8 +7,13 @@ $params = [
 ];
 $params['assetsDir'] = $params['baseUrl'].'web/';
 $params['enableConversionCodes'] = true;
-$params['moreAboutSQRedirectPage'] = "http://www.expressestateagency.co.uk/LPAPT-TEST/web/lpapt2a#select-slot";
+$params['moreAboutSQRedirectPage'] = "http://www.expressestateagency.co.uk/LPAPT/web/lpapt2a#select-slot";
 
+// mailConfig
+$params['mail'] = [
+    'apiKey' => 'iWXEJKCA9DGqgNXxP__oJA', // naveed.malik
+    'fromEmail' => 'test@dl.com',
+];
 
 // alter parameters in different environments
 if(YII_ENV_TEST)

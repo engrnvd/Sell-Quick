@@ -1,4 +1,4 @@
-<section class="process-stepbg">
+<section id="section2" class="process-stepbg">
     <div class="container padding0">
         <h2>Our simple 3 step process</h2>
         <div class="col-lg-12 padding0">

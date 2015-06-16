@@ -23,7 +23,7 @@
                     <h4>Estimation</h4>
                     <p>
                         Selling price<br />
-                        <span>£<?=$minPropertyValue?> - £<?=$maxPropertyValue?></span>
+                        <span>£<?=($estimatedPropertyValue * 0.98)?> - £<?=$estimatedPropertyValue?></span>
                     </p>
 
                 </div><!--price tag-->
@@ -31,7 +31,7 @@
             </div>
             <div class="modal-footer">
 
-                <a href="<?=Yii::$app->params['moreAboutSQPage']?>" class="orange-btn" style="font-size:15px;">
+                <a href="<?=Yii::$app->params['moreAboutSQPage']?>" target="_blank" class="orange-btn" style="font-size:15px;">
                     Click here to find out more about Express Estate Agency’s Quick Sale Option
                 </a>
             </div>

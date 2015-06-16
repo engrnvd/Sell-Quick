@@ -1,4 +1,9 @@
 <section class="first-section">
+
+<!--    <a href="#" data-scroll-to="section2" class="btn btn-circle go-to">-->
+<!--        <i class="fa fa-angle-double-down animated"></i>-->
+<!--    </a>-->
+
     <div class="col-lg-6 col-sm-6 padding0">
         <div class="section1-left text-center">
             <h2>Are you selling your property?</h2>
